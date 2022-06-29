@@ -85,10 +85,11 @@ def plot_genes_predicted(
         )
     
 
-# function for ploting genes across IRI timepoints
+# function for ploting the predicted genes expression across IRI timepoints
 def plot_genes_timepoints(
     genes,
     adata_list,
+    order_cell=False,
     x = "x",
     y = "y",
     spot_size = 200,
@@ -127,6 +128,66 @@ def plot_genes_timepoints(
                 ax=ax,
                 cmap=cmap,
                 title= title_text,
+                sort_order=order_cell,
                 vmin = 0,
                 vmax = 1,
                 colorbar_loc=clbr)
+
+# function for ploting the original genes expression across IRI timepoints
+def plot_genes_timepoints_measured(
+    genes,
+    adata_list,
+    order_cell=False,
+    x = "x",
+    y = "y",
+    spot_size = 200,
+    scale_factor=0.1, 
+    cmap="inferno_r", 
+    perc=0.001
+):
+    adata_measured= adata_list[0].concatenate(adata_list[1:len(adata_list)])
+    adata_measured.X = adata_measured.X.toarray()
+    adata_measured.var.index = [g.lower() for g in adata_measured.var.index]
+    coords = [[x,y] for x,y in zip(adata_measured.obs[x].values,adata_measured.obs[y].values)]
+    adata_measured.obsm['spatial'] = np.array(coords)
+    data = []
+    for ix, gene in enumerate(genes):
+        if gene not in adata_measured.var.index:
+            data.append(np.zeros_like(np.array(adata_measured[:, 0].X).flatten()))
+        else:
+            data.append(np.array(adata_measured[:, gene].X).flatten())
+
+    df = pd.DataFrame(
+        data=np.array(data).T, columns=genes, index=adata_measured.obs.index,
+    )
+    construct_obs_plot(df, adata_measured, perc=perc, suffix="Measured")
+    cmap1 = plt.cm.get_cmap(cmap)
+    rgba = cmap1(0)
+    na_color=matplotlib.colors.to_hex(rgba)
+    adata2=[]
+    for hx, adata1 in enumerate(adata_list):
+        new_adata=adata_measured[adata_measured.obs.index.isin([s + "-" + str(hx) for s in adata1.obs_names])]
+        adata2.append(new_adata)
+    fig = plt.figure(figsize=(len(genes) * 7, len(adata2) * 7))
+    gs = GridSpec(len(adata2), len(genes), figure=fig)
+    for hx, adata3 in enumerate(adata2):
+        for vx, gene in enumerate(genes):
+            ax = fig.add_subplot(gs[hx, vx])
+            title_text = "" if hx!=0 else None
+            clbr = "right" if vx==len(genes)-1 and hx==len(adata2)-1 else None
+            sc.pl.spatial(
+                adata3,
+                spot_size=spot_size,
+                scale_factor=scale_factor,
+                color=["{} (Measured)".format(gene)],
+                frameon=False,
+                show=False,
+                ax=ax,
+                cmap=cmap,
+                title= title_text,
+                sort_order=order_cell,
+                vmin = 0,
+                vmax = 1,
+                colorbar_loc=clbr,
+                na_color=na_color)
+

@@ -191,3 +191,111 @@ def plot_genes_timepoints_measured(
                 colorbar_loc=clbr,
                 na_color=na_color)
 
+# plot the predicted cell types on 2D spatial after tangram
+def plot_spatial_celltype(
+    adata_sp,
+    color,
+    x="x",
+    y="y",
+    groups=None,
+    color_map=None, 
+    cmap=None, 
+    palette=None, 
+    colorbar_loc='right',
+    title=None,
+    size=1,
+    legend_loc='right margin'
+):
+    adata_sp.obs["predicted_celltype"] = adata_sp.obsm['tangram_ct_pred'].idxmax(axis=1)
+    coords = [[UMAP1,UMAP2] for UMAP1,UMAP2 in zip(adata_sp.obs[x].values,adata_sp.obs[y].values)]
+    adata_sp.obsm['X_umap'] = np.array(coords)
+    sc.pl.umap(adata_sp, 
+               color=color,
+               color_map=color_map,
+               cmap=cmap,
+               palette=palette,
+               colorbar_loc=colorbar_loc,
+               title=title,
+               legend_loc=legend_loc,
+               size=size,
+               groups=groups
+              )
+
+# plot the predicted cell type score on 2D space
+def plot_cell_annotation_score(
+    adata_sp, 
+    celltype_list, 
+    x="x", 
+    y="y", 
+    spot_size=None, 
+    scale_factor=None, 
+    perc=0,
+    ax=None,
+    cmap="viridis"
+):
+        
+    adata_sp.obs.drop(annotation_list, inplace=True, errors="ignore", axis=1)
+    df = adata_sp.obsm["tangram_ct_pred"][annotation_list]
+    construct_obs_plot(df, adata_sp, perc=perc)
+    
+    if 'spatial' not in adata_sp.obsm.keys():
+        coords = [[x,y] for x,y in zip(adata_sp.obs[x].values,adata_sp.obs[y].values)]
+        adata_sp.obsm['spatial'] = np.array(coords)
+    sc.pl.spatial(
+        adata_sp, 
+        color=annotation_list, 
+        cmap=cmap, 
+        show=False, 
+        frameon=False, 
+        spot_size=spot_size, 
+        scale_factor=scale_factor, 
+        ax=ax
+    )
+    adata_sp.obs.drop(annotation_list, inplace=True, errors="ignore", axis=1)
+
+# plot the predicted cell type score across IRI timepoints
+def plot_cell_score_timepoints(
+    adata_sp_list, 
+    celltypes, 
+    x="x", 
+    y="y", 
+    spot_size=300, 
+    scale_factor=None, 
+    perc=0,
+    order_cell=False,
+    ax=None,
+    cmap="viridis"
+):
+    adata_sp = adata_sp_list[0].concatenate(adata_sp_list[1:len(adata_sp_list)])
+    adata_sp.obs.drop(celltypes, inplace=True, errors="ignore", axis=1)
+    df = adata_sp.obsm["tangram_ct_pred"][celltypes]
+    construct_obs_plot(df, adata_sp, perc=perc)
+    max_val=adata_sp.obs[celltypes].values.max()
+    if 'spatial' not in adata_sp.obsm.keys():
+        coords = [[x,y] for x,y in zip(adata_sp.obs[x].values,adata_sp.obs[y].values)]
+        adata_sp.obsm['spatial'] = np.array(coords)
+    adata2=[]
+    for hx, adata1 in enumerate(adata_sp_list):
+        new_adata=adata_sp[adata_sp.obs.index.isin([s + "-" + str(hx) for s in adata1.obs_names])]
+        adata2.append(new_adata)
+    fig = plt.figure(figsize=(len(adata2) * 7, len(celltypes) * 7))
+    gs = GridSpec(len(celltypes),len(adata2), figure=fig)
+    for hx, celltype in enumerate(celltypes):
+        for vx, adata3 in enumerate(adata2):
+            ax = fig.add_subplot(gs[hx, vx])
+            clbr = "right" if vx==len(celltypes)-1 and hx==len(adata2)-1 else None
+            sc.pl.spatial(
+                adata3,
+                spot_size=spot_size,
+                scale_factor=scale_factor,
+                color=celltype,
+                frameon=False,
+                show=False,
+                ax=ax,
+                cmap=cmap,
+                title= "",
+                sort_order=order_cell,
+                vmin = 0,
+                vmax = max_val,
+                colorbar_loc=clbr)
+    adata_sp.obs.drop(celltypes, inplace=True, errors="ignore", axis=1)

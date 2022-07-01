@@ -27,7 +27,7 @@ def run_spagcn(
     adata.obs["pred"]= y_pred
     adata.obs["pred"]=adata.obs["pred"].astype('category')
     adj_2d=spg.calculate_adj_matrix(x=x_pixel,y=y_pixel, histology=False)
-    refined_pred=spg.refine(sample_id=adata.obs.index.tolist(), pred=adata.obs["pred"].tolist(), dis=adj_2d, shape="hexagon")
+    refined_pred=spg.refine(sample_id=adata.obs.index.tolist(), pred=adata.obs["pred"].tolist(), dis=adj_2d, shape="square")
     adata.obs["refined_pred"]=refined_pred
     adata.obs["refined_pred"]=adata.obs["refined_pred"].astype('category')
     adata.write_h5ad(output_file)

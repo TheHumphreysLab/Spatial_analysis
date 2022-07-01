@@ -32,3 +32,51 @@ def run_spagcn(
     adata.obs["refined_pred"]=adata.obs["refined_pred"].astype('category')
     adata.write_h5ad(output_file)
     
+def get_spaDEG(
+    adata,
+    target,
+    x,
+    y,
+    min_in_group_fraction=0.8,
+    min_in_out_group_ratio=1,
+    min_fold_change=1.5,
+    start = None,
+    r=None,
+    ratio=0.5
+):
+    if start == None:
+        adj_2d=spg.calculate_adj_matrix(x=x_pixel, y=y_pixel, histology=False)
+        start, end= np.quantile(adj_2d[adj_2d!=0],q=0.001), np.quantile(adj_2d[adj_2d!=0],q=0.1)
+    if r == None:
+        r=spg.search_radius(target_cluster=target, 
+                    cell_id=adata.obs.index.tolist(), 
+                    x=x_pixel, y=y_pixel, 
+                    pred=adata.obs["pred"].tolist(), 
+                    start=start, end=end, num_min=10, 
+                    num_max=14,  max_run=100)
+    nbr_domians=spg.find_neighbor_clusters(target_cluster=target,
+                                   cell_id=adata.obs.index.tolist(), 
+                                   x=adata.obs[x].tolist(), 
+                                   y=adata.obs[y].tolist(), 
+                                   pred=adata.obs["pred"].tolist(),
+                                   radius=r,
+                                   ratio=ratio)
+
+    nbr_domians=nbr_domians[0:3]
+    de_genes_info=spg.rank_genes_groups(input_adata=adata,
+                                target_cluster=target,
+                                nbr_list=nbr_domians, 
+                                label_col="pred", 
+                                adj_nbr=True, 
+                                log=True)
+    de_genes_info=de_genes_info[(de_genes_info["pvals_adj"]<0.05)]
+    filtered_info=de_genes_info
+    filtered_info=filtered_info[(filtered_info["pvals_adj"]<0.05) &
+                            (filtered_info["in_out_group_ratio"]>min_in_out_group_ratio) &
+                            (filtered_info["in_group_fraction"]>min_in_group_fraction) &
+                            (filtered_info["fold_change"]>min_fold_change)]
+    filtered_info=filtered_info.sort_values(by="in_group_fraction", ascending=False)
+    filtered_info["target_dmain"]=target
+    filtered_info["neighbors"]=str(nbr_domians)
+    print("SVGs for domain ", str(target),":", filtered_info["genes"].tolist())
+    return de_genes_info

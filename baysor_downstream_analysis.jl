@@ -65,3 +65,4 @@ write_output(week6, "week6")
 using JLD2
 @save "individual_clustering_obj.jld"
 
+## plot segmentation polygons

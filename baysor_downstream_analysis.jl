@@ -1,4 +1,4 @@
-# These are some Julia codes I made for clustering the cartana and merfish data after Baysor cell segmentation
+# These are some Julia codes I made for analyzing the cartana data after Baysor cell segmentation
 
 import Baysor as B
 import Colors

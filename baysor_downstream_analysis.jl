@@ -14,6 +14,7 @@ using NearestNeighbors
 using ProgressMeter
 using Statistics
 using StatsBase
+using JLD2
 
 using Pkg
 
@@ -63,7 +64,6 @@ write_output(day2, "day2")
 write_output(week6, "week6")
 
 # Save the final objects
-using JLD2
 @save "individual_clustering_obj.jld"
 
 ## plot segmentation polygons
@@ -73,8 +73,6 @@ min_pixels_per_cell = 15;
 grid_step = scale / min_pixels_per_cell
 bandwidth= scale / 10
 df_spatial.ncv_color = convert(Vector{String}, df_spatial.ncv_color)
-
-import Makie as MK
 
 anno2 = Dict("1" => "#450000", "2"=>"#adadad","3"=>"#adadad","4"=>"#9cfc6f","5"=>"#adadad","6"=>"#adadad",
             "7"=>"#adadad","8"=>"red","9"=>"#adadad","10"=>"#adadad","11"=>"#adadad","12"=>"#adadad")

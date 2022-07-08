@@ -1,20 +1,21 @@
 # These are some Julia codes I made for clustering the cartana and merfish data after Baysor cell segmentation
 
-import Baysor
+import Baysor as B
 import Colors
 import Images
 import MAT
 import MultivariateStats
 import Plots
 import CSV
+import Makie as MK
 using DataFrames
 using DataFramesMeta
 using NearestNeighbors
 using ProgressMeter
 using Statistics
 using StatsBase
+
 using Pkg
-B = Baysor;
 
 # Set up python environment to use scanpy in Julia
 ENV["PYTHON"]="/home/haojiawu/anaconda3/bin/python"
@@ -75,9 +76,11 @@ df_spatial.ncv_color = convert(Vector{String}, df_spatial.ncv_color)
 
 import Makie as MK
 
-fig1=B.plot_molecules(df_spatial, polygons, color=:ncv_color, 
-    markersize=1, size=(5000,6000)
-);
+anno2 = Dict("1" => "#450000", "2"=>"#adadad","3"=>"#adadad","4"=>"#9cfc6f","5"=>"#adadad","6"=>"#adadad",
+            "7"=>"#adadad","8"=>"red","9"=>"#adadad","10"=>"#adadad","11"=>"#adadad","12"=>"#adadad")
+fig1=B.plot_molecules(df_spatial, polygons, color=:cluster ,annotation=:cluster,
+    markersize=2, size=(5000,6000),poly_strokewidth=0.5, alpha=0.3,ann_colors=anno2,
+)
 MK.save("day2_plot_seg_whole.png", fig1)
 fig1
 

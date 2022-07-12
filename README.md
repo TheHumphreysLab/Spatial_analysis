@@ -1,7 +1,7 @@
 # Kidney spatial in situ sequencing with CARTANA
 
 ### This repo documented the codes for generating the data in our manuscript XXX
-#### To run the codes (in Julia, Python and R languages), the following tools need to be pre-installed in your workstation.
+#### To run the codes (in <a href="https://julialang.org">Julia</a>, <a href="https://www.python.org">Python</a> and <a href="https://cran.r-project.org">R</a> languages), the following tools need to be pre-installed in your workstation.
 1. Cellpose:https://github.com/MouseLand/cellpose
 2. Baysor:https://github.com/kharchenkolab/Baysor
 3. SpaGCN:https://github.com/jianhuupenn/SpaGCN

@@ -1,6 +1,7 @@
 using Pkg
 using JLD2
 import Baysor as B
+import Makie as MK
 
 pre_data=load("day2_baysor.jld2");
 polygons= pre_data["polygons"];

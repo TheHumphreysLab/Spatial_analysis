@@ -1,12 +1,14 @@
-# Spatial_analysis
+# Kidney spatial in situ sequencing with CARTANA
 
-### Scripts for imaging-based spatial data analysis
-Plans:
-1. Priori segmentation on DAPI with Cellpose
-2. Cell segmentation with Baysor
-3. Clustering on the segmented cells with Scanpy
-4. Spatial domains analysis with SpaGCN
-5. Visualization of genes on cells projected to 2D tissue/UMAP
-6. Compared Visium and Cartana
-7. Tangram for snRNA-seq integration
-8. Cell-cell communications in situ
+### This repo documented the codes for generating the data in our manuscript XXX
+#### To run the codes (in Julia, Python and R languages), the following tools need to be pre-installed in your workstation.
+1. Cellpose:https://github.com/MouseLand/cellpose
+2. Baysor:https://github.com/kharchenkolab/Baysor
+3. SpaGCN:https://github.com/jianhuupenn/SpaGCN
+4. Tangram:https://github.com/broadinstitute/Tangram
+5. Scanpy:https://github.com/scverse/scanpy
+6. Seurat:https://github.com/satijalab/seurat
+
+
+
+

@@ -9,6 +9,21 @@
 5. Scanpy:https://github.com/scverse/scanpy
 6. Seurat:https://github.com/satijalab/seurat
 
+### Figures
+#### 1. Script to reproduce figure 1 <br>
+functions/baysor_downstream_analysis.jl<br>
+Figure1.jl<br>
+
+#### 2. Script to reproduce figure 2<br>
+
+#### 3. Script to reproduce figure 3<br>
+functions/functions_for_SpaGCN.py<br>
+functions/Julia_functions_for_ploting.jl<br>
+Figure3.py<br>
+
+
+
+
 
 
 

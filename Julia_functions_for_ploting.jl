@@ -1,4 +1,4 @@
-# This is a modified function based on Baysor's plot_molecules that allows visualizing the expression of the selected genes on top of the cell segmentation.
+# This is a modified function based on Baysor's plot_molecules that allows visualizing the expression of the selected genes.
 function plot_genes_cell_segments(df_spatial::DataFrame, polygons::Array{Matrix{Float64}, 1}=Matrix{Float64}[]; 
         genes::Union{Vector, Symbol, String}="Podxl", 
         colors::Union{Vector, Symbol, String}="blue", 
@@ -25,6 +25,7 @@ function plot_genes_cell_segments(df_spatial::DataFrame, polygons::Array{Matrix{
     return fig
 end
 
+#This function allows visualizing the expression of the selected genes on top of the cell segmentation.
 function plot_genes_overlaid_cells(df_spatial::DataFrame, polygons::Array{Matrix{Float64}, 1}=Matrix{Float64}[]; 
         genes::Union{Vector, Symbol, String}="Podxl", 
         colors::Union{Vector, Symbol, String}="blue", 

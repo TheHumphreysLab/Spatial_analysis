@@ -15,6 +15,8 @@ functions/baysor_downstream_analysis.jl<br>
 Figure1.jl<br>
 
 #### 2. Script to reproduce figure 2<br>
+functions/Julia_functions_for_ploting.jl<br>
+Figure2.jl<br>
 
 #### 3. Script to reproduce figure 3<br>
 functions/functions_for_SpaGCN.py<br>

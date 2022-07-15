@@ -35,10 +35,14 @@ function plot_genes_overlaid_cells(df_spatial::DataFrame, polygons::Array{Matrix
         annotation::Union{<:AbstractVector, Symbol, Nothing}=nothing,
         ann_colors::Union{Nothing, Dict}=nothing, noise_ann = nothing,
         show_legend=false,legend_fontsize=12, transparency=0.5,
-        legend_kwargs::Union{Dict, NamedTuple, Nothing}=nothing
+        is_noise::Union{Vector, BitArray, Symbol, Nothing}=nothing,
+        legend_kwargs::Union{Dict, NamedTuple, Nothing}=nothing,
+        noise_kwargs::Union{Dict, NamedTuple, Nothing}=nothing
     )
     legend_args_default = (bgcolor=Colors.RGBA(1, 1, 1, 0.85),);
     legend_kwargs = B.update_args(legend_args_default, legend_kwargs)
+    noise_args_default = (marker=:xcross, markersize=(0.3 * markersize), strokewidth=0, color="gray50")
+    noise_kwargs = B.update_args(noise_args_default, noise_kwargs)
     if annotation !== nothing
         if typeof(annotation) === Symbol
             annotation = df_spatial[!,annotation]
@@ -56,6 +60,7 @@ function plot_genes_overlaid_cells(df_spatial::DataFrame, polygons::Array{Matrix
     df_spatial=transform(df_spatial, :gene_id => ByRow(x -> map_color[x]) => :new_color)
     xlims = something(x_lims, B.val_range(df_spatial.x))
     ylims = something(y_lims, B.val_range(df_spatial.y))
+    
     fig = MK.Figure(resolution=canvas_size)
     fig[1, 1] = MK.Axis(fig; xticklabelsize=12, yticklabelsize=12, xticksvisible=false, xticklabelsvisible=false, yticksvisible=false, yticklabelsvisible=false);
     ann_vals = annotation[annotation .!= noise_ann] |> unique |> sort
@@ -63,13 +68,24 @@ function plot_genes_overlaid_cells(df_spatial::DataFrame, polygons::Array{Matrix
     for (color, ann) in zip(c_map, ann_vals)
         style_dict = (ann_colors === nothing) ? Dict() : Dict(:color => ann_colors[ann])
         MK.scatter!(df_spatial.x[annotation .== ann] .+ offset[1], df_spatial.y[annotation .== ann] .+ offset[2];
-            strokewidth=0, markersize=markersize, label=ann, color=color, style_dict...)
+            strokewidth=0, markersize=2*markersize, label=ann, color=color, style_dict...)
     end
     if show_legend
         MK.axislegend(;legend_kwargs...)
     end
     MK.poly!([MK.Point2.(eachrow(p .+ [offset[1] offset[2]])) for p in polygons]; strokecolor="black", color="transparent", strokewidth=segline_size, label="")
     colors2 = df_spatial[!,:new_color]
+    if typeof(is_noise) === Symbol
+        is_noise = df_spatial[!,is_noise]
+    end
+    if is_noise !== nothing
+        df_noise = df_spatial[is_noise,:]
+        df_spatial = df_spatial[.!is_noise,:]
+        colors2 = colors2[.!is_noise]
+    end
+    if is_noise !== nothing
+        MK.scatter!(df_noise.x .+ offset[1], df_noise.y .+ offset[2]; noise_kwargs...)
+    end
     MK.scatter!(df_spatial.x .+ offset[1], df_spatial.y .+ offset[2]; color=colors2,
             strokewidth=0, markersize=markersize)
     MK.xlims!(MK.current_axis(), xlims .+ offset[1])

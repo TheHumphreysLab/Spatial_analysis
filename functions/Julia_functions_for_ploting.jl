@@ -92,3 +92,15 @@ function plot_genes_overlaid_cells(df_spatial::DataFrame, polygons::Array{Matrix
     MK.ylims!(MK.current_axis(), ylims .+ offset[2])
     return MK.current_figure()
 end
+
+function make_cell_proportion_df(cell_stat::DataFrame; 
+        nfeatures::Int64=10, column::Union{Symbol, String}=:celltype, 
+        time_point::Union{String, Nothing}=nothing)
+    cell_stat=subset(cell_stat, :n_transcripts => ByRow(>=(nfeatures)))
+    cell_counts=countmap(cell_stat[!, column])
+    cell_counts=DataFrame(count=collect(keys(cell_counts)), celltype=collect(values(cell_counts)))
+    if time_point !== nothing
+        cell_counts[!, :time] .= time_point
+    end
+    return cell_counts
+end

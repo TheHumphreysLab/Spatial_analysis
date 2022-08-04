@@ -2,6 +2,7 @@
 ![alt text](https://github.com/TheHumphreysLab/Spatial_analysis/blob/main/image/demo.png)
 ### This repo documented the codes for generating the data in our manuscript XXX
 #### To run the codes in <a href="https://julialang.org">Julia</a>, the following tools need to be pre-installed in your workstation.
+0. SpaData:https://github.com/HaojiaWu/SpaData.jl
 1. Cellpose:https://github.com/MouseLand/cellpose
 2. Baysor:https://github.com/kharchenkolab/Baysor
 3. SpaGCN:https://github.com/jianhuupenn/SpaGCN

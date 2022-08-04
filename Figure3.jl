@@ -117,7 +117,7 @@ end
 slide_df=prepare_slideseq_data("/home/data/Jia/slideseqv2/czi/Puck_191204_15_healthy.h5ad",
                                 "mouse_annot.csv");
 
-visium_df=sc.read_visium("/home/data/Jia/visium/fsham_137_processed/outs")
+visium_df=prepare_visium_data("/home/data/Jia/visium/fsham_137_processed/outs")
 
 cartana_df=prepare_cartana_data("/home/data/Jia/spatial/Sham_Jia/segmentation_cell_stats.csv",
                                 "/home/data/Jia/spatial/Sham_Jia/segmentation_counts.tsv")

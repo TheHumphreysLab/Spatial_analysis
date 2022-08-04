@@ -98,7 +98,7 @@ function plot_gene_expression(count_df, gene;
         y_lims=(minimum(count_df.y)-0.05*maximum(count_df.y),1.05*maximum(count_df.y))
     end
     if isa(c_map, Nothing)
-        c_map= cmap=ColorSchemes.ColorScheme([colorant"gray94",colorant"pink",colorant"red"])
+        c_map = ColorSchemes.ColorScheme([colorant"gray94",colorant"pink",colorant"red"])
     end
     if x_reverse
        x_lims = reverse(x_lims)

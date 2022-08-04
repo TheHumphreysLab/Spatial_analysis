@@ -90,7 +90,7 @@ end
 
 function plot_gene_expression(count_df, gene; 
         c_map=nothing, canvas_size=(600,600),x_lims=nothing, 
-        y_lims=nothing, marker_size =2)
+        y_lims=nothing, marker_size =2, x_reverse=false, y_reverse=false)
     if isa(x_lims, Nothing)
         x_lims=(minimum(count_df.x)-0.05*maximum(count_df.x),1.05*maximum(count_df.x))
     end
@@ -98,14 +98,21 @@ function plot_gene_expression(count_df, gene;
         y_lims=(minimum(count_df.y)-0.05*maximum(count_df.y),1.05*maximum(count_df.y))
     end
     if isa(c_map, Nothing)
-        c_map= cmap=ColorSchemes.ColorScheme([colorant"gray96",colorant"lemonchiffon1",colorant"red"])
+        c_map= cmap=ColorSchemes.ColorScheme([colorant"gray94",colorant"pink",colorant"red"])
+    end
+    if x_reverse
+       x_lims = reverse(x_lims)
+    end
+    if y_reverse
+       y_lims = reverse(y_lims)
     end
     gene_expr = count_df[!, gene]
     colors = get.(Ref(c_map), (gene_expr .- minimum(gene_expr)) ./ maximum(gene_expr))
     plt_color="#" .* hex.(colors)
     fig = MK.Figure(resolution=canvas_size)
-    fig[1, 1] = MK.Axis(fig; xticklabelsize=12, yticklabelsize=12, xticksvisible=false, xticklabelsvisible=false, yticksvisible=false, yticklabelsvisible=false,
-        xgridvisible = false,ygridvisible = false);
+    fig[1, 1] = MK.Axis(fig; xticklabelsize=12, yticklabelsize=12, xticksvisible=false, 
+                        xticklabelsvisible=false, yticksvisible=false, yticklabelsvisible=false,
+                        xgridvisible = false, ygridvisible = false)
     MK.scatter!(count_df.x, count_df.y; color=plt_color,
             strokewidth=0, markersize=marker_size)
     MK.xlims!(MK.current_axis(), x_lims)

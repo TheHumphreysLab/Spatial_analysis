@@ -120,6 +120,78 @@ function plot_gene_expression(count_df, gene;
     MK.current_figure()
 end
 
+function plot_annotation(sp_df::DataFrame, col::Union{String, Symbol}; 
+        c_map=nothing, canvas_size=(600,600),x_lims=nothing, cell_order=nothing,
+        y_lims=nothing, marker_size =2, x_reverse=false, y_reverse=false)
+    if isa(cell_order, Nothing)
+       celltype=unique(sp_df[!, col])
+    end
+    celltype=cell_order
+    if isa(col, String)
+        col=Symbol(col)
+    end
+    celltype=unique(sp_df[!, col])
+    if isa(c_map, Nothing)
+        c_map=hex.(Colors.distinguishable_colors(length(celltype), Colors.colorant"#007a10", lchoices=range(20, stop=70, length=15)))
+        c_map="#" .* c_map
+    end
+    sp_df=spd.mapvalues(sp_df, col, :color, celltype, c_map)
+    if isa(x_lims, Nothing)
+        x_lims=(minimum(sp_df.x)-0.05*maximum(sp_df.x),1.05*maximum(sp_df.x))
+    end
+    if isa(y_lims, Nothing)
+        y_lims=(minimum(sp_df.y)-0.05*maximum(sp_df.y),1.05*maximum(sp_df.y))
+    end
+    if x_reverse
+       x_lims = reverse(x_lims)
+    end
+    if y_reverse
+       y_lims = reverse(y_lims)
+    end
+    fig = MK.Figure(resolution=canvas_size)
+    fig[1, 1] = MK.Axis(fig; xticklabelsize=12, yticklabelsize=12, xticksvisible=false, 
+                        xticklabelsvisible=false, yticksvisible=false, yticklabelsvisible=false,
+                        xgridvisible = false, ygridvisible = false)
+    MK.scatter!(sp_df.x, sp_df.y; color=sp_df.color,
+            strokewidth=0, markersize=marker_size)
+    MK.xlims!(MK.current_axis(), x_lims)
+    MK.ylims!(MK.current_axis(), y_lims)
+    MK.current_figure()
+end
+
+function dotplot_spatial(sp_df::DataFrame, genes::Union{Vector, String},
+        cluster::Union{Symbol, String};expr_cutoff::Union{Float64, Int64}=0,
+        x_title="Gene",y_title="Cell type", cell_order::Union{Vector, String, Nothing}=nothing,
+        fontsize::Int64=12, color_scheme::String="yelloworangered",reverse_color::Bool=false,
+        fig_height::Union{String, Int64}=400, fig_width::Union{String, Int64}=400)
+    all_df=DataFrame()
+    for (i, gene) in enumerate(genes)
+        gene_expr=sp_df[!, gene]
+        df = DataFrame()
+        df.gene=gene_expr
+        df.celltype=string.(sp_df[!, cluster])
+        avg_expr=combine(groupby(df, :celltype), :gene => mean => :avg_exp);
+        perc_expr=combine(groupby(df, :celltype), :gene => function(x) countmap(x.>expr_cutoff)[:1]*100/length(x) end => :perc_exp)
+        df_plt=innerjoin(avg_expr, perc_expr, on = :celltype)
+        df_plt.gene.=gene
+        all_df=[all_df; df_plt]
+    end
+    p=all_df |> @vlplot(:circle,
+        x={"gene:o", title="Gene", scale={
+                domain=genes
+            }, axis={labelFontSize=fontsize,titleFontSize=fontsize}},
+        y={"celltype:o", title="Cell type",
+           scale={
+                domain=cell_order
+            }, axis={labelFontSize=fontsize,titleFontSize=fontsize}},
+        color={"avg_exp:q",
+                scale={scheme=color_scheme,reverse=reverse_color}},
+        size={"perc_exp:q", legend={symbolFillColor="transparent"}, scale={domain=(0,100)}},
+        height= fig_height, width=fig_width
+        )
+    return p
+end
+
 ### data processing
 slide_df=prepare_slideseq_data("/home/data/Jia/slideseqv2/czi/Puck_191204_15_healthy.h5ad",
                                 "mouse_annot.csv");
@@ -133,6 +205,12 @@ cartana_df=prepare_cartana_data("/home/data/Jia/spatial/Sham_Jia/segmentation_ce
 plot_gene_expression(slide_df, "Umod")
 plot_gene_expression(visium_df, "Umod")
 plot_gene_expression(cartana_df, "Umod")
+
+### Dot plot to show mixed gene expression in the visium cell type
+order_by=["PEC","PCT","TAL","MD","DCT","CD-PC","CD-IC","Fib","vSMC","JGA","MC",
+            "Macrophage","Leukocyte","vEC"]
+dotplot_spatial(slide_df,["Inmt","Umod","Slc12a1","Egf","Slc7a13","Lrp2"],:celltype2; 
+    fig_width=100,cell_order=order_by, fig_height=300)
 
 
 

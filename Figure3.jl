@@ -213,5 +213,6 @@ dotplot_spatial(slide_df,["Inmt","Umod","Slc12a1","Egf","Slc7a13","Lrp2"],:cellt
     fig_width=100,cell_order=order_by, fig_height=300)
 
 
-
+### Plot cell type annotation
+plot_annotation(visium_df, :celltype2; marker_size=9,cell_order=cellorder, c_map= c_map, y_reverse=true )
 

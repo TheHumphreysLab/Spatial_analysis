@@ -36,7 +36,7 @@ DotPlot(immune_sub, features = c("Cd74","C1qa","Ly6e","Cd3e","Cxcl10","C3","Igkc
 dev.off()
 
 ##### plot annotation
-coordinates<-read.csv("../spatial/juanru/juanrufinal/cartana/Baysorresult/Week6_Jia/segmentation_cell_stats.csv")
+coordinates<-read.csv("Week6_Jia/segmentation_cell_stats.csv")
 load("immune_subclustering.Rda")
 immune_cells<-colnames(immune_sub)
 metadata<-immune_sub@meta.data

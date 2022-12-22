@@ -1,6 +1,6 @@
 ## Python script to compare gene imputation results from SpaGE, Tangram and gimVI
 Please installl [SpaGE](https://github.com/tabdelaal/SpaGE), [Tangram](https://github.com/broadinstitute/Tangram) and [scvi-tools](https://github.com/scverse/scvi-tools) before running this script. 
-Below are some example codes for using the Leave-One-Out Cross Validation (LOOCV) approach to compare the performance of different spatial gene imputation pipelines. It requires four files as input: 1) ***scRNA cellxgene count***; 2) ***scRNA metadata***; 3) ***spatial cellxgene count***; 4) ***spatial metadata***.  
+Below are some example codes for using the Leave-One-Out Cross Validation (LOOCV) approach to compare the performance of different spatial gene imputation pipelines. It requires four files as input: 1) ***scRNA $cell \times gene$ count***; 2) ***scRNA metadata***; 3) ***spatial $cell \times gene$ count***; 4) ***spatial metadata***.  
 #### 1. SpaGE:
 ```bash
 # Please change the gene names and working dir in imputation.py

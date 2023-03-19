@@ -30,6 +30,13 @@ sham.polygonData = polygons
 sham = cs.polygons_cell_mapping(sham);
 sham = cs.generate_polygon_counts(sham);
 cs.save(sham; filename="sham.jld2")
+spaGE_path = "/mnt/sdc/new_analysis_cellscopes/SpaGE"
+data_path = "/mnt/sdc/new_analysis_cellscopes/for_imputate/IRI_sham/"
+sham = cs.load(filename="sham.jld2")
+sham = cs.run_spaGE(sham, data_path, spaGE_path)
+center=[13806.73, 23484.30]
+sham = cs.compute_kidney_coordinates(sham, center)
+cs.save(sham; filename="sham_imputed.jld2")
 
 ### 2. IRI4h ###
 count_molecules =  DataFrame(CSV.File("/mnt/sdc/new_analysis_cellscopes/seg_files/Hour4_Jia/segmentation.csv"))
@@ -59,6 +66,13 @@ hour4.polygonData = polygons
 hour4 = cs.polygons_cell_mapping(hour4)
 hour4 = cs.generate_polygon_counts(hour4)
 cs.save(hour4; filename="hour4.jld2")
+spaGE_path = "/mnt/sdc/new_analysis_cellscopes/SpaGE"
+data_path = "/mnt/sdc/new_analysis_cellscopes/for_imputate/IRI_4h/"
+hour4 = cs.load(filename="hour4.jld2")
+hour4 = cs.run_spaGE(hour4, data_path, spaGE_path)
+center=[14708.91, 22491.68]
+hour4 = cs.compute_kidney_coordinates(hour4, center)
+cs.save(hour4; filename="hour4_imputed.jld2")
 
 ### 3. IRI12h ###
 count_molecules =  DataFrame(CSV.File("/mnt/sdc/new_analysis_cellscopes/seg_files/Hour12_Jia/segmentation.csv"))
@@ -87,6 +101,8 @@ hour12.metaData.cluster = string.(hour12.spmetaData.cell.cluster)
 hour12.polygonData = polygons
 hour12 = cs.polygons_cell_mapping(hour12)
 hour12 = cs.generate_polygon_counts(hour12)
+center=[14685.08, 22769.85]
+hour12 = cs.compute_kidney_coordinates(hour12, center)
 cs.save(hour12; filename="hour12.jld2")
 
 ### 4. IRI2d ###
@@ -117,6 +133,12 @@ day2.polygonData = polygons
 day2 = cs.polygons_cell_mapping(day2)
 day2 = cs.generate_polygon_counts(day2)
 cs.save(day2; filename="day2.jld2")
+data_path = "/mnt/sdc/new_analysis_cellscopes/for_imputate/IRI_2d/"
+spaGE_path = "/mnt/sdc/new_analysis_cellscopes/SpaGE"
+day2 = cs.run_spaGE(day2, data_path, spaGE_path)
+center=[15793.59,26864.04]
+day2 = cs.compute_kidney_coordinates(day2, center)
+cs.save(day2; filename="day2_imputed.jld2")
 
 ### 5. IRI6w ###
 count_molecules =  DataFrame(CSV.File("/mnt/sdc/new_analysis_cellscopes/seg_files/Week6_Jia/segmentation.csv"))
@@ -146,6 +168,14 @@ week6.polygonData = polygons
 week6 = cs.polygons_cell_mapping(week6)
 week6 = cs.generate_polygon_counts(week6)
 cs.save(week6; filename="week6.jld2")
+data_path = "/mnt/sdc/new_analysis_cellscopes/for_imputate/IRI_6w/"
+spaGE_path = "/mnt/sdc/new_analysis_cellscopes/SpaGE"
+week6 = cs.run_spaGE(week6, data_path, spaGE_path)
+cell_sub=cs.subset_fov(week6, [503,509,743,749], 40,40);
+cell_sub=filter(:celltype => ==("CD-PC"), cell_sub);
+center=[mean(cell_sub.x),mean(cell_sub.y)]
+week6 = cs.compute_kidney_coordinates(week6, center)
+cs.save(week6; filename="week6_imputed.jld2")
 
 
 

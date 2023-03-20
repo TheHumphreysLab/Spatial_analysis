@@ -6,7 +6,7 @@ anno2 = Dict("Podo" => ("magenta1",alpha_trans), "HealthyPT"=>("green3",alpha_tr
              "gEC"=>("dodgerblue",alpha_trans),"Fib"=>("#edff4d",alpha_trans),"JGA"=>("sienna2",alpha_trans),"Immune"=>("darkgreen",alpha_trans), "Uro"=>("black",alpha_trans));
 cs.plot_cell_polygons(sham, "celltype"; 
     cell_colors=anno2,x_lims=(0,35000), 
-    y_lims=(0,40000),canvas_size=(5000,6000),
+    y_lims=(0,40000), width=5000,height=6000,
     stroke_color="gray80")
 
 ## artery
@@ -97,7 +97,7 @@ anno2 = Dict("Podo" => ("magenta1",alpha_trans),
                 "Uro"=>("black",alpha_trans))
 cs.plot_cell_polygons(sham, "celltype"; 
     cell_colors=anno2, x_lims=(15000,17000), y_lims=(16000,20000), 
-    width=300,heigth=600,stroke_color="gray40")
+    width=300,height=600,stroke_color="gray40")
 
 ## papilla
 anno2 = Dict("Podo" => ("magenta1",alpha_trans), 

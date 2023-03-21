@@ -4,8 +4,7 @@ import CellScopes as cs
 using Statistics
 
 # cell annotation for sham
-sham=load("new_sham_SpaData_tg2.jld2")
-sham=sham["sham"];
+sham=cs.load(filename="sham_final.jld2")
 genes=["Podxl","Slc5a2","Inmt","Havcr1","Umod","Egf","Slc12a1","Slc12a3","Aqp2","Slc26a4","Flt1",
                       "Col1a1","Ren1","Acta2","Cd74","Krt19","Eln","Ehd3"];
 cs.sp_dot_plot(sham,genes,:cluster; 
@@ -16,46 +15,42 @@ cell2=["InjPT","TAL","vEC","HealthyPT","HealthyPT","Immune","TAL",
         "CD-PC","HealthyPT","gEC","Podo","TAL","TAL","Uro","TAL",
         "Fib","HealthyPT","JGA","DCT","CD-IC"]
 sham.cells=cs.mapvalues(sham.cells, :cluster, :celltype, cell1, cell2);
-cs.save(sham; filename="new_sham_SpaData_tg.jld2")
+cs.save(sham; filename="new_sham_SpaData.jld2")
 
 # cell annotation for hour4
-hour4=load("new_hour4_SpaData_tg.jld2")
-hour4=hour4["sp"];
+hour4=cs.load(filename="hour4_final.jld2")
 cell1=string.(collect(1:20))
 cell2=["HealthyPT","Podo","TAL","InjPT","InjPT","InjPT","HealthyPT",
         "gEC","HealthyPT","CD-IC","CD-PC","vEC","HealthyPT","Uro","TAL",
         "TAL","InjPT","Immune","Fib","DCT"]
 hour4.cells=cs.mapvalues(hour4.cells, :cluster, :celltype, cell1, cell2);
-cs.save(hour4; filename="new_hour4_SpaData_tg.jld2")
+cs.save(hour4; filename="new_hour4_SpaData.jld2")
 
 # cell annotation for hour12
-hour12=load("new_hour12_SpaData_tg.jld2")
-hour12=hour12["sp"];
+hour12=cs.load(filename="hour12_final.jld2")
 cell1=string.(collect(1:20))
 cell2=["TAL","JGA","TAL","TAL","InjPT","HealthyPT","InjPT",
         "gEC","TAL","HealthyPT","CD-IC","Podo","CD-PC","Fib","InjPT",
         "Immune","DCT","InjPT","vEC","InjPT"]
 hour12.cells=cs.mapvalues(hour12.cells, :cluster, :celltype, cell1, cell2);
-cs.save(hour12; filename="new_hour12_SpaData_tg.jld2")
+cs.save(hour12; filename="new_hour12_SpaData.jld2")
 
 # cell annotation for day2
-day2=load("new_day2_SpaData_tg.jld2")
-day2=day2["sp"];
+day2=cs.load(filename="day2_final.jld2")
 cluster=collect(1:20)
 celltypes=["Uro","DCT","InjPT","TAL","gEC","InjPT","Immune","JGA","Fib","InjPT","InjPT","vEC","HealthyPT",
     "Podo","InjPT","Fib","CD-IC","CD-PC","Fib","InjPT"]
 day2.cells = cs.mapvalues(day2.cells, :cluster, :celltype, cluster, celltypes);
-cs.save(day2; filename="new_day2_SpaData_tg.jld2")
+cs.save(day2; filename="new_day2_SpaData.jld2")
 
 # cell annotation for week6
-week6=load("new_week6_SpaData_tg.jld2")
-week6=week6["sp"];
+week6=cs.load(filename="week6_final.jld2")
 cell1=collect(1:20)
 cell2=["Uro","CD-IC","DCT","HealthyPT","Immune","CD-PC","CD-PC",
         "HealthyPT","Immune","InjPT","HealthyPT","Fib","JGA","vEC","TAL",
         "Immune","Immune","Podo","gEC","Fib"]
 week6.cells=cs.mapvalues(week6.cells, :cluster, :celltype, cell1, cell2);
-cs.save(week6; filename="new_week6_SpaData_tg.jld2")
+cs.save(week6; filename="new_week6_SpaData.jld2")
 
 # making the cell fraction df
 sham_cell=cs.make_cell_proportion_df(sham.spmetaData.cell; nfeatures=0)

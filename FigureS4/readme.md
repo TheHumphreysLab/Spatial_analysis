@@ -5,33 +5,33 @@ Below are some example codes for using the Leave-One-Out Cross Validation (LOOCV
 ```bash
 # Please change the gene names and working dir in imputation.py
 python imputation.py\ 
-          --sc_rna /home/data/Qiao/MouseIRI_control.dge.txt.gz\ 
-          --sc_rna_meta /home/data/Qiao/GSE139107_MouseIRI.metadata.txt.gz\ 
-          --segmentation_cell_stats /home/data/Qiao/segmentation_cell_stats.csv\ 
-          --segmentation_counts /home/data/Qiao/segmentation_counts.tsv\
-          --output_dir /home/data/Qiao/impute_result\
+          --sc_rna /home/data/MouseIRI_control.dge.txt.gz\ 
+          --sc_rna_meta /home/data/GSE139107_MouseIRI.metadata.txt.gz\ 
+          --segmentation_cell_stats /home/data/segmentation_cell_stats.csv\ 
+          --segmentation_counts /home/data/segmentation_counts.tsv\
+          --output_dir /home/data/impute_result\
           --method spaGE
 ```
 #### 2. gimVI:
 ```bash
 # Please change the gene names and working dir in imputation.py
 python imputation.py\ 
-          --sc_rna /home/data/Qiao/MouseIRI_control.dge.txt.gz\ 
-          --sc_rna_meta /home/data/Qiao/GSE139107_MouseIRI.metadata.txt.gz\ 
-          --segmentation_cell_stats /home/data/Qiao/segmentation_cell_stats.csv\ 
-          --segmentation_counts /home/data/Qiao/segmentation_counts.tsv\
-          --output_dir /home/data/Qiao/impute_result\
+          --sc_rna /home/data/MouseIRI_control.dge.txt.gz\ 
+          --sc_rna_meta /home/data/GSE139107_MouseIRI.metadata.txt.gz\ 
+          --segmentation_cell_stats /home/data/segmentation_cell_stats.csv\ 
+          --segmentation_counts /home/data/segmentation_counts.tsv\
+          --output_dir /home/data/impute_result\
           --method gimVI
 ```
 #### 3. tangram:
 ```bash
 # Please change the gene names and working dir in imputation.py
 python imputation.py\ 
-          --sc_rna /home/data/Qiao/MouseIRI_control.dge.txt.gz\ 
-          --sc_rna_meta /home/data/Qiao/GSE139107_MouseIRI.metadata.txt.gz\ 
-          --segmentation_cell_stats /home/data/Qiao/segmentation_cell_stats.csv\ 
-          --segmentation_counts /home/data/Qiao/segmentation_counts.tsv\
-          --output_dir /home/data/Qiao/impute_result\
+          --sc_rna /home/data/MouseIRI_control.dge.txt.gz\ 
+          --sc_rna_meta /home/data/GSE139107_MouseIRI.metadata.txt.gz\ 
+          --segmentation_cell_stats /home/data/segmentation_cell_stats.csv\ 
+          --segmentation_counts /home/data/segmentation_counts.tsv\
+          --output_dir /home/data/impute_result\
           --method tangram
 ```
           

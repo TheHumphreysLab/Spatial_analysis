@@ -1,3 +1,5 @@
+# Analyze a human kidney xenium dataset with Giotto
+
 ```R
 library(Seurat)
 options(Seurat.object.assay.version = "v5")

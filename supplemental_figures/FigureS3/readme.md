@@ -1,6 +1,6 @@
 # Analyze a human kidney xenium dataset with Giotto
 
-### This markdown documented the steps to analyze a human kidney xenium dataset using Giotto. The data can be download from the 10x genomics website: https://www.10xgenomics.com/resources/datasets/human-kidney-preview-data-xenium-human-multi-tissue-and-cancer-panel-1-standard
+This markdown document outlines the steps for analyzing a human kidney xenium dataset using Giotto. The dataset can be downloaded from the 10x Genomics website at the following link: https://www.10xgenomics.com/resources/datasets/human-kidney-preview-data-xenium-human-multi-tissue-and-cancer-panel-1-standard
 
 
 ```R

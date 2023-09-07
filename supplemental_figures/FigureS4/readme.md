@@ -1,4 +1,5 @@
-# Analyze a human kidney xenium dataset with Giotto
+# Analyze a human kidney xenium dataset with Seurat V5
+
 
 ```R
 library(Seurat)

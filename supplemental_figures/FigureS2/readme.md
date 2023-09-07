@@ -1,3 +1,5 @@
+# Analyze a human kidney xenium dataset with CellScopes.jl
+This is a script to reproduce the figures in Figure S2. The human kidney xenium data can be downloaded from the 10x website. The single cell RNA-seq data for gene imputation can be accessed from GEO (https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM4572192).
 ```julia
 import CellScopes as cs
 
